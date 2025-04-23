@@ -150,5 +150,4 @@ This project is a complete implementation of a microservice-based invoice system
 
 For any inquiries (after submission 😊):
 
-**Email:** yourname@example.com  
-**GitHub:** [your-github](https://github.com/yourusername)
+**Email:** alibyt21@gmail.com
