@@ -8,8 +8,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/invoice-db'),
-    ScheduleModule.forRoot(), // فعال‌سازی ماژول زمان‌بندی
+    MongooseModule.forRoot('mongodb://mongo:27017/invoice-db'),
+    ScheduleModule.forRoot(),
     InvoiceModule,
   ],
   controllers: [AppController],

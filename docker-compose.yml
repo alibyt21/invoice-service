@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # MongoDB service
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend
+
+  # RabbitMQ service
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "15672:15672"  # RabbitMQ Management UI
+      - "5672:5672"    # RabbitMQ default port
+    networks:
+      - backend
+
+  # Invoice Service
+  invoice-service:
+    build:
+      context: ./invoice-service
+    container_name: invoice-service
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/invoice_db
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
+
+  # Email Sender Service
+  email-sender:
+    build:
+      context: ./email-sender
+    container_name: email-sender
+    depends_on:
+      - rabbitmq
+    environment:
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mongo_data:
+    driver: local
+

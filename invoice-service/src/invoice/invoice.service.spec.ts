@@ -6,33 +6,39 @@ import { Invoice } from './schemas/invoice.schema';
 describe('InvoiceService', () => {
   let service: InvoiceService;
 
+  // Sample mock invoice data
   const mockInvoice = { customer: 'John Doe', amount: 1000, date: new Date() };
 
-  // Mock constructor for Invoice model
+  // Mock constructor simulating Mongoose document creation and saving
   const mockInvoiceConstructor = jest.fn().mockImplementation((data) => ({
     ...data,
-    save: jest.fn().mockResolvedValue({ ...data }),
+    save: jest.fn().mockResolvedValue({ ...data }), // Simulates saving and returning the saved object
   }));
 
+  // Mock Mongoose model methods
   const mockInvoiceModel = {
-    findById: jest.fn(),
-    find: jest.fn(),
+    findById: jest.fn(), // Simulate findById
+    find: jest.fn(),     // Simulate find (with or without filters)
   };
 
+  // Setup test module and inject dependencies
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         InvoiceService,
         {
+          // Provide a mock version of the Mongoose model using getModelToken
           provide: getModelToken(Invoice.name),
           useValue: Object.assign(mockInvoiceConstructor, mockInvoiceModel),
         },
       ],
     }).compile();
 
+    // Get the InvoiceService instance from the module
     service = module.get<InvoiceService>(InvoiceService);
   });
 
+  // Basic existence test
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
@@ -40,13 +46,18 @@ describe('InvoiceService', () => {
   describe('create', () => {
     it('should create and return the saved invoice', async () => {
       const result = await service.create(mockInvoice);
+
+      // Check that the returned result matches the mock invoice
       expect(result).toEqual(mockInvoice);
+
+      // Verify that the mock constructor was called with correct data
       expect(mockInvoiceConstructor).toHaveBeenCalledWith(mockInvoice);
     });
   });
 
   describe('findById', () => {
     it('should return invoice by id', async () => {
+      // Mock the exec function of the query to return the mock invoice
       const execMock = jest.fn().mockResolvedValue(mockInvoice);
       mockInvoiceModel.findById.mockReturnValue({ exec: execMock });
 

@@ -1,98 +1,154 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🧾 Invoice & Daily Sales Report System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a backend system built with NestJS, MongoDB, and RabbitMQ to manage sales invoices and generate daily sales reports. It consists of two main services:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+1. **Invoice Service** - Responsible for creating invoices and generating daily sales reports.
+2. **Email Sender Service** - A separate service that consumes reports from a RabbitMQ queue and sends them via email (mocked).
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📁 Project Structure
 
-## Project setup
-
-```bash
-$ npm install
+```
+.
+├── invoice-service/
+│   ├── src/
+│   ├── test/
+│   └── Dockerfile
+├── email-sender/
+│   ├── src/
+│   ├── test/
+│   └── Dockerfile
+├── docker-compose.yml
+└── README.md
 ```
 
-## Compile and run the project
+---
+
+## 🚀 Technologies Used
+
+- [NestJS](https://nestjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [RabbitMQ](https://www.rabbitmq.com/)
+- Cron Jobs (using `@nestjs/schedule`)
+- Docker & Docker Compose
+- Supertest & Jest (for testing)
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone and Navigate
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone <repository-url>
+cd <repository-root>
 ```
 
-## Run tests
+### 2. Install Dependencies
+
+Install dependencies for both services:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cd invoice-service && npm install
+cd ../email-sender && npm install
 ```
 
-## Deployment
+### 3. Run with Docker
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Use Docker Compose to start MongoDB, RabbitMQ, and both services:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker-compose up --build
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+The services will start on:
 
-## Resources
+- **Invoice Service**: http://localhost:3000
+- **RabbitMQ Management UI**: http://localhost:15672 (username: guest, password: guest)
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 📬 API Endpoints (Invoice Service)
 
-## Support
+| Method | Endpoint            | Description                   |
+|--------|---------------------|-------------------------------|
+| POST   | `/invoices`         | Create a new invoice          |
+| GET    | `/invoices/:id`     | Get invoice by ID             |
+| GET    | `/invoices`         | Get all invoices (with filter) |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Optional query params for filtering:
+- `startDate` — filter by start date
+- `endDate` — filter by end date
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 📆 Cron Job: Daily Sales Report
 
-## License
+The `invoice-service` generates a report daily at **12:00 PM** (server time). This includes:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Total sales amount
+- Per-item quantities (grouped by SKU)
+
+The report is sent to RabbitMQ queue: `daily_sales_report`.
+
+---
+
+## 📨 Email Sender Service
+
+The `email-sender` service listens to the `daily_sales_report` queue and:
+
+- Receives sales summary reports
+- Logs a **mock email** with formatted content
+
+You can find logs in the terminal as proof of email "sending."
+
+---
+
+## 🧪 Testing
+
+### Unit Tests
+
+Both services include unit tests using **Jest**.
+
+### Integration Tests
+
+The invoice service includes API integration tests using **Supertest**.
+
+To run tests:
+
+```bash
+# In each service directory
+npm run test
+```
+
+---
+
+## 🧼 Submission Notes
+
+- `node_modules`, `.git`, and `dist` folders are excluded from ZIP.
+- All services are cleanly separated with clear structure and Docker support.
+- Error handling and logging are implemented for all critical paths.
+
+---
+
+## 👨‍💻 Author Notes
+
+This project is a complete implementation of a microservice-based invoice system designed to demonstrate:
+
+- REST API development with NestJS
+- MongoDB schema design and filtering
+- Cron-based task scheduling
+- Message queuing with RabbitMQ
+- Email report processing
+- Docker-based service orchestration
+- Professional testing practices
+
+---
+
+## 📮 Contact
+
+For any inquiries (after submission 😊):
+
+**Email:** yourname@example.com  
+**GitHub:** [your-github](https://github.com/yourusername)
